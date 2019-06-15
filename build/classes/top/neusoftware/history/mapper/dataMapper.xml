@@ -5,6 +5,9 @@
        select * from big_thing order by date
     </select>
     <insert id="addData" parameterType="top.neusoftware.history.model.Data">
-    	insert into big_thing values(#{date},#{heading},#{body})
+    	insert into big_thing (date,heading,body) values(#{date},#{heading},#{body})
     </insert>
+    <delete id="deleteData" parameterType="java.lang.Integer">
+    	delete from big_thing where id = #{id}
+    </delete>
 </mapper>
