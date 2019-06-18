@@ -2,6 +2,8 @@ package top.neusoftware.history.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +17,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import top.neusoftware.history.mapper.DataMapper;
+import top.neusoftware.history.model.Data;
+import top.neusoftware.history.model.DeleteRecord;
 
 /**
  * Servlet implementation class DeleteBigThing
@@ -39,12 +43,19 @@ public class DeleteBigThing extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Origin", "*");  
 		response.setHeader("Content-type", "text/html;charset=UTF-8");  
 		response.setCharacterEncoding("utf-8");
+		String ip=request.getHeader("X-Forwarded-For");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        String time=df.format(new Date());
 		int id=Integer.parseInt(request.getParameter("id"));
 		String resource = "conf.xml";
 		InputStream inputStream = Resources.getResourceAsStream(resource);
 		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 		SqlSession session = sqlSessionFactory.openSession();
 		DataMapper mapper = session.getMapper(DataMapper.class);
+		Data data=mapper.getData(id);
+		session.commit();
+		DeleteRecord dr=new DeleteRecord(id,data.getDate(),data.getHeading(),data.getBody(),ip,time);
+		mapper.deleteRecord(dr);
 		mapper.deleteData(id);
 		session.commit();
 		System.out.println("删除成功");

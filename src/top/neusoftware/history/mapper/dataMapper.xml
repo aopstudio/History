@@ -2,12 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
 <mapper namespace="top.neusoftware.history.mapper.DataMapper">
     <select id="getDatas" resultType="top.neusoftware.history.model.Data" > 
-       select * from big_thing order by date
+      	select id,date,heading,body from windows order by date
+    </select>
+    <select id="getData" parameterType="java.lang.Integer" resultType="top.neusoftware.history.model.Data">
+    	select id,date,heading,body from windows where id = #{data_id}
     </select>
     <insert id="addData" parameterType="top.neusoftware.history.model.Data">
-    	insert into big_thing (date,heading,body) values(#{date},#{heading},#{body})
+    	insert into windows (date,heading,body) values(#{date},#{heading},#{body})
     </insert>
     <delete id="deleteData" parameterType="java.lang.Integer">
-    	delete from big_thing where id = #{id}
+    	delete from windows where id = #{id}
     </delete>
+    <insert id="deleteRecord" parameterType="top.neusoftware.history.model.DeleteRecord">
+    	insert into delete_record (id,date,heading,body,ip_address,time) values(#{id},#{date},#{heading},#{body},#{ip_address},#{time})
+    </insert>
 </mapper>
