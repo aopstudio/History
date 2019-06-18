@@ -2,6 +2,8 @@ package top.neusoftware.history.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,6 +20,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import com.alibaba.fastjson.JSON;
 
 import top.neusoftware.history.mapper.DataMapper;
+import top.neusoftware.history.model.AddRecord;
 import top.neusoftware.history.model.Data;
 
 /**
@@ -44,6 +47,9 @@ public class NewBigThing extends HttpServlet {
 		response.setHeader("Content-type", "text/html;charset=UTF-8");  
 		response.setCharacterEncoding("utf-8");
 		request.setCharacterEncoding("utf-8");
+		String ip=request.getHeader("X-Forwarded-For");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//ËÆæÁΩÆÊó•ÊúüÊ†ºÂºè
+        String time=df.format(new Date());
 		int date=Integer.parseInt(request.getParameter("date"));
 		String heading=request.getParameter("heading");
 		String body=request.getParameter("body");
@@ -55,7 +61,11 @@ public class NewBigThing extends HttpServlet {
 		DataMapper mapper = session.getMapper(DataMapper.class);
 		mapper.addData(data);
 		session.commit();
-		System.out.print("≥…π¶ÃÌº”");
+		int id=mapper.getLastId();
+		AddRecord ar=new AddRecord(id,ip,time);
+		mapper.addRecord(ar);
+		session.commit();
+		System.out.print("ÔøΩ…πÔøΩÔøΩÔøΩÔøΩ");
 		response.getWriter().print("success");
 	}
 

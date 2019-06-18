@@ -7,6 +7,9 @@
     <select id="getData" parameterType="java.lang.Integer" resultType="top.neusoftware.history.model.Data">
     	select id,date,heading,body from windows where id = #{data_id}
     </select>
+    <select id="getLastId" resultType="java.lang.Integer">
+    	select LAST_INSERT_ID()
+    </select>
     <insert id="addData" parameterType="top.neusoftware.history.model.Data">
     	insert into windows (date,heading,body) values(#{date},#{heading},#{body})
     </insert>
@@ -15,5 +18,8 @@
     </delete>
     <insert id="deleteRecord" parameterType="top.neusoftware.history.model.DeleteRecord">
     	insert into delete_record (id,date,heading,body,ip_address,time) values(#{id},#{date},#{heading},#{body},#{ip_address},#{time})
+    </insert>
+    <insert id="addRecord" parameterType="top.neusoftware.history.model.AddRecord">
+    	insert into insert_record (id,ip_address,time) values(#{id},#{ip_address},#{time})
     </insert>
 </mapper>
