@@ -43,12 +43,13 @@ public class GetBigThings extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Origin", "*");  
 		response.setHeader("Content-type", "text/html;charset=UTF-8");  
 		response.setCharacterEncoding("utf-8");
+		String table=request.getParameter("table");
 		String resource = "conf.xml";
 		InputStream inputStream = Resources.getResourceAsStream(resource);
 		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 		SqlSession session = sqlSessionFactory.openSession();
 		DataMapper mapper = session.getMapper(DataMapper.class);
-		List<Data> datas=mapper.getDatas();
+		List<Data> datas=mapper.getDatas(table);
 		String datasString=JSON.toJSONString(datas);
 		response.getWriter().append(datasString);
 		System.out.print(datasString);

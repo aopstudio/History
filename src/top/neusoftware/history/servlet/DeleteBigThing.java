@@ -46,17 +46,18 @@ public class DeleteBigThing extends HttpServlet {
 		String ip=request.getHeader("X-Forwarded-For");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String time=df.format(new Date());
+        String table=request.getParameter("table");
 		int id=Integer.parseInt(request.getParameter("id"));
 		String resource = "conf.xml";
 		InputStream inputStream = Resources.getResourceAsStream(resource);
 		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 		SqlSession session = sqlSessionFactory.openSession();
 		DataMapper mapper = session.getMapper(DataMapper.class);
-		Data data=mapper.getData(id);
+		Data data=mapper.getData(table,id);
 		session.commit();
 		DeleteRecord dr=new DeleteRecord(id,data.getDate(),data.getHeading(),data.getBody(),ip,time);
 		mapper.deleteRecord(dr);
-		mapper.deleteData(id);
+		mapper.deleteData(table,id);
 		session.commit();
 		System.out.println("删除成功");
 	}
