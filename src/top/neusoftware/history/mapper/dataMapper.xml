@@ -17,9 +17,9 @@
     	delete from ${table} where id = #{id}
     </delete>
     <insert id="deleteRecord" parameterType="top.neusoftware.history.model.DeleteRecord">
-    	insert into delete_record (id,date,heading,body,ip_address,time) values(#{id},#{date},#{heading},#{body},#{ip_address},#{time})
+    	insert into delete_record (table_name,id,date,heading,body,ip_address,location,time) values(#{table},#{id},#{date},#{heading},#{body},#{ip_address},#{location},#{time})
     </insert>
     <insert id="addRecord" parameterType="top.neusoftware.history.model.AddRecord">
-    	insert into insert_record (id,ip_address,time) values(#{id},#{ip_address},#{time})
+    	insert into insert_record (table_name,id,ip_address,location,time) values(#{table},#{id},#{ip_address},#{location},#{time})
     </insert>
 </mapper>

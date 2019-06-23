@@ -15,10 +15,15 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import com.sun.xml.internal.bind.v2.runtime.Location;
 
 import top.neusoftware.history.mapper.DataMapper;
 import top.neusoftware.history.model.Data;
 import top.neusoftware.history.model.DeleteRecord;
+import top.neusoftware.history.tool.HeWeather;
 
 /**
  * Servlet implementation class DeleteBigThing
@@ -48,6 +53,7 @@ public class DeleteBigThing extends HttpServlet {
         String time=df.format(new Date());
         String table=request.getParameter("table");
 		int id=Integer.parseInt(request.getParameter("id"));
+		String location=HeWeather.getLocationByIp(ip);
 		String resource = "conf.xml";
 		InputStream inputStream = Resources.getResourceAsStream(resource);
 		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
@@ -55,7 +61,7 @@ public class DeleteBigThing extends HttpServlet {
 		DataMapper mapper = session.getMapper(DataMapper.class);
 		Data data=mapper.getData(table,id);
 		session.commit();
-		DeleteRecord dr=new DeleteRecord(id,data.getDate(),data.getHeading(),data.getBody(),ip,time);
+		DeleteRecord dr=new DeleteRecord(table,id,data.getDate(),data.getHeading(),data.getBody(),ip,location,time);
 		mapper.deleteRecord(dr);
 		mapper.deleteData(table,id);
 		session.commit();

@@ -1,9 +1,17 @@
 package top.neusoftware.history.model;
 
 public class AddRecord {
+	private String table;
 	private int id;
 	private String ip_address;
 	private String time;
+	
+	public String getTable() {
+		return table;
+	}
+	public void setTable(String table) {
+		this.table = table;
+	}
 	public int getId() {
 		return id;
 	}
@@ -22,8 +30,9 @@ public class AddRecord {
 	public void setTime(String time) {
 		this.time = time;
 	}
-	public AddRecord(int id, String ip_address, String time) {
+	public AddRecord(String table, int id, String ip_address, String time) {
 		super();
+		this.table=table;
 		this.id = id;
 		this.ip_address = ip_address;
 		this.time = time;
