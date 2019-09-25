@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSON;
 import top.neusoftware.history.mapper.DataMapper;
 import top.neusoftware.history.model.AddRecord;
 import top.neusoftware.history.model.Data;
+import top.neusoftware.history.tool.HeWeather;
 
 /**
  * Servlet implementation class NewBigThing
@@ -54,6 +55,7 @@ public class NewBigThing extends HttpServlet {
 		int date=Integer.parseInt(request.getParameter("date"));
 		String heading=request.getParameter("heading");
 		String body=request.getParameter("body");
+		String location=HeWeather.getLocationByIp(ip);
 		Data data=new Data(date, heading, body);
 		String resource = "conf.xml";
 		InputStream inputStream = Resources.getResourceAsStream(resource);
@@ -63,7 +65,7 @@ public class NewBigThing extends HttpServlet {
 		mapper.addData(table,data);
 		session.commit();
 		int id=mapper.getLastId();
-		AddRecord ar=new AddRecord(id,ip,time);
+		AddRecord ar=new AddRecord(table,id,ip,location,time);
 		mapper.addRecord(ar);
 		session.commit();
 		System.out.print("�ɹ����");
