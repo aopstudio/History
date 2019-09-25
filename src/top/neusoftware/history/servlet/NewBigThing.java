@@ -50,6 +50,7 @@ public class NewBigThing extends HttpServlet {
 		String ip=request.getHeader("X-Forwarded-For");
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String time=df.format(new Date());
+        String table=request.getParameter("table");
 		int date=Integer.parseInt(request.getParameter("date"));
 		String heading=request.getParameter("heading");
 		String body=request.getParameter("body");
@@ -59,7 +60,7 @@ public class NewBigThing extends HttpServlet {
 		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 		SqlSession session = sqlSessionFactory.openSession();
 		DataMapper mapper = session.getMapper(DataMapper.class);
-		mapper.addData(data);
+		mapper.addData(table,data);
 		session.commit();
 		int id=mapper.getLastId();
 		AddRecord ar=new AddRecord(id,ip,time);
